@@ -1,0 +1,22 @@
+{
+  "name": "reading_reciever",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "nohup": "nohup npm start &",
+    "clean": "rm -rf symlinks uploads node_modules",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.1",
+    "express": "^4.14.0",
+    "fs-symlink": "^1.2.1",
+    "mkdirp": "^0.5.1",
+    "multer": "^1.2.0",
+    "serve-index": "^1.8.0"
+  }
+}
