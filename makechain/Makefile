@@ -38,11 +38,11 @@ KNN_RENDER_CONFUSION=output/render.confusion.json
 
 # Configuration stuff
 #--------------------
-REMOTE_KNN=false
+REMOTE_KNN=true
 REMOTE_KNN_SPLIT=5
 REMOTE_KNN_TIMEOUT=100000
-KNN_CONFUSION_ARGS=-f -k3 -n 1.7 -q 12
-USE_MODEL=true
+KNN_CONFUSION_ARGS=-f -k3
+USE_MODEL=false
 
 # Build target
 #-------------
@@ -111,9 +111,9 @@ jobs/%.jobfile: csv/%.csv
 	# This replaces $(CSV_TO_JOBFILE)
 	basename $< | cut -f1 -d'_' | tr --delete '\n' > $@
 	echo " $<" >> $@
-	cat $< | tail -n +2 | cut -f1 -d',' | tr --delete ' ' | tr '\n' ' ' >> $@
-	echo "" >> $@
 	cat $< | tail -n +2 | cut -f2 -d',' | tr --delete ' ' | tr '\n' ' ' >> $@
+	echo "" >> $@
+	cat $< | tail -n +2 | cut -f1 -d',' | tr --delete ' ' | tr '\n' ' ' >> $@
 	echo "" >> $@
 
 # .jobfiles to .jobfile (combine)
