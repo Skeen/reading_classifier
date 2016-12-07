@@ -38,11 +38,11 @@ KNN_RENDER_CONFUSION=output/render.confusion.json
 
 # Configuration stuff
 #--------------------
-REMOTE_KNN=true
+REMOTE_KNN=false
 REMOTE_KNN_SPLIT=5
-REMOTE_KNN_TIMEOUT=100000
-KNN_CONFUSION_ARGS=-f -k3
-USE_MODEL=false
+REMOTE_KNN_TIMEOUT=1000000
+KNN_CONFUSION_ARGS=-f -k 3
+USE_MODEL=true
 
 # Build target
 #-------------
