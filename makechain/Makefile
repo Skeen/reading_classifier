@@ -41,8 +41,8 @@ KNN_RENDER_CONFUSION=output/render.confusion.json
 REMOTE_KNN=false
 REMOTE_KNN_SPLIT=5
 REMOTE_KNN_TIMEOUT=1000000
-KNN_CONFUSION_ARGS=-f -k 3
-USE_MODEL=true
+KNN_CONFUSION_ARGS?=-f -k 3
+USE_MODEL?=false
 
 # Build target
 #-------------
@@ -54,6 +54,11 @@ clean:
 	rm -rf jobfiles
 	rm -rf output
 	rm -rf csv
+	rm -rf .flags
+	rm -rf jobs
+
+echo:
+	echo "$(USE_MODEL)"
 
 # Rebuild on changed compiler flags
 #----------------------------------
