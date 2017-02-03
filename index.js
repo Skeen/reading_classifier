@@ -29,8 +29,10 @@ options
 	.option('-S, --statistics <file>','Specify the model to use. Optional')
 	.option('-n, --statistics-deviation <number>','Number of standard devations to use.', parseFloat)
 	.option('-q, --statistics-cutoff <number>','Cut neighbours of site, if less than n are statisically likely.', parseInt)
+	.option('-M, --vote', 'Neighbours vote on right answer')
 	.option('-f, --fractional', 'Generate a fractional confusion matrix')
 	.option('-F, --fractInt <number>','Generate confusion matrix using fractionals, but only with n largest', parseInt)
+	.option('-v, --verbose', 'Additional output')
 	.option('-h, --help', '');
 
 options.parse(process.argv);
@@ -41,14 +43,18 @@ if(!options.reference)
 	process.exit(1);
 }
 
-console.log('Using these sets:');
-console.log("Reference name", options.reference);
-console.log("Model name", options.statistics);
-console.log("knn", options.knn);
-console.log("stat-dev", options.statisticsDeviation);
-console.log("stat-cut", options.statisticsCutoff);
-console.log("f", options.fractional);
-console.log("F", options.fractInt);
+if(options.verbose)
+{
+	console.log('Using these sets:');
+	console.log("Reference name", options.reference);
+	console.log("Model name", options.statistics);
+	console.log("knn", options.knn);
+	console.log("stat-dev", options.statisticsDeviation);
+	console.log("stat-cut", options.statisticsCutoff);
+	console.log("f", options.fractional);
+	console.log("F", options.fractInt);
+	console.log("M", options.vote);
+}
 
 //Bash script
 var exec = require('child_process').exec;
@@ -65,7 +71,12 @@ var run_bash_chain = function(query_path, query_name, callback)
 		if(options.fractional)
 			args = args + ' -f';
 	   	else if(options.fractInt)
-			args = args + ' --fractInt=' + options.F;	
+			args = args + ' --fractInt=' + options.F;
+		else if(options.vote)
+			args = args + ' -M';
+
+		if(options.verbose)
+			args = args + ' -v';
 	    
 		args = args + '"';
 
@@ -119,8 +130,10 @@ app.post('/upload', upload.single('file'), function(req, res, next)
     // Now process
     if(filename.endsWith('.csv') || filename.endsWith('.raw'))
     {
-        run_bash_chain(path, filename, function(err, result)
+        run_bash_chain(path, filename, function(err, stdout, stderr)
         {
+			if(options.verbose)
+				console.log("logging:", stderr);
             if(err)
             {
                 console.error("Error running bash chain");
@@ -129,10 +142,10 @@ app.post('/upload', upload.single('file'), function(req, res, next)
             }
             else
             {
-				console.log("Responsing with classification result:");
-				console.log(result);
+				console.log("Responding with classification result:");
+				console.log(stdout);
                 res.status(200);
-                res.end(result);
+                res.end(stdout);
             }
         });
     }
